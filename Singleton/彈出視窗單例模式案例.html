@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- <script src="./main.js"></script> -->
+  <!-- <script src="./store.js"></script> -->
+</head>
+<style>
+  .wrap {
+    width: 400px;
+    margin: 16px auto;
+    text-align: center;
+  }
+  .modal-login{
+    display: none;
+    width: 300px;
+    height: 300px;
+    position: fixed;
+    top: calc(50% - 150px);
+    left: calc(50% - 150px);
+    box-shadow: 0px 3px 5px rgba(0,0,0,0.5);
+    text-align: center;
+    padding: 16px;
+  }
+
+  .modal-login.active{
+    display: block;
+  }
+</style>
+<body>
+  <div class="wrap">
+    <h1>單例模式</h1>
+    <h2>登入視窗案例</h2>
+  
+    <br>
+    <button class="login-btn">登入</button>
+  </div>
+
+  <script>
+    document.querySelector('.login-btn').onclick = () => {
+      // 創建登入窗
+      const loginModalDom = createSingletonLoginModal()
+      // 顯示登入窗
+      showLoginModal(loginModalDom)
+    }
+
+    function showLoginModal(dom) {
+      dom.classList.add('active')
+    }
+
+    const createSingletonLoginModal = (function() {
+      let instance = null
+
+      return function() {
+        if(instance === null){
+          // 創建model
+          let modalEl = document.createElement('div')
+          modalEl.innerHTML = 'yo yo我是登入視窗'
+          modalEl.classList.add('modal-login')
+          document.body.appendChild(modalEl)
+
+          instance = modalEl
+        }
+
+        return instance
+      }
+    })()
+  </script>
+</body>
+</html>
