@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>通用單例模式-彈出視窗</title>
+</head>
+<style>
+  .wrap {
+    width: 400px;
+    margin: 16px auto;
+    text-align: center;
+  }
+  .modal-login{
+    display: none;
+    width: 300px;
+    height: 300px;
+    position: fixed;
+    top: calc(50% - 150px);
+    left: calc(50% - 150px);
+    box-shadow: 0px 3px 5px rgba(0,0,0,0.5);
+    text-align: center;
+    padding: 16px;
+  }
+
+  .modal-login.active{
+    display: block;
+  }
+</style>
+<body>
+  <div class="wrap">
+    <h1>單例模式</h1>
+    <h2>登入視窗案例</h2>
+  
+    <br>
+    <button class="login-btn" btn-id="1">登入1</button>
+
+    <button class="login-btn" btn-id="2">登入2</button>
+
+  </div>
+
+  <script>
+    // 獲取單例登入窗
+    const createSingletonLoginModal = getSingleton(createLoginModal)
+
+    // document.querySelector('.login-btn').onclick = (element) => {
+    //   // 創建登入窗
+    //   // const loginModalDom = createSingletonLoginModal();
+    //   // const loginModalDom = createSingletonLoginModal('yo yo 我是登入視窗~');
+    //   const loginModalDom = createSingletonLoginModal.call(element, 'yo yo 我是登入視窗~');
+    //   // 顯示登入窗
+    //   showLoginModal(loginModalDom)
+    // }
+
+
+    document.querySelectorAll('.login-btn').forEach(btn => {
+      btn.onclick = (element) => {
+        const loginModalDom = createSingletonLoginModal.call(element, 'yo yo 我是登入視窗~');
+        // 顯示登入窗
+        showLoginModal(loginModalDom)
+      }
+    });
+
+    function showLoginModal(dom) {
+      dom.classList.add('active')
+    }
+
+    function createLoginModal(title) {
+      let modalEl = document.createElement('div')
+      modalEl.classList.add('modal-login')
+      const btnId = this?.target?.getAttribute('btn-id')
+
+      const htmlTitle = `<h3>${title ? title : '登入窗'}<h3>`
+      const htmlBody = `<p>${btnId ? btnId : '無資料'}</p>`
+      // 顯示target資訊
+      
+      modalEl.innerHTML = htmlTitle + htmlBody
+
+      document.body.appendChild(modalEl)
+      return modalEl
+    }
+
+
+    function getSingleton(fn) {
+      let instance = null
+
+      return function() {
+        if(instance === null){
+          // instance = fn() // 直接調用
+          // instance = fn(...arguments) // 調用並將剩餘參數帶入
+          instance = fn.apply(this, arguments) // 調用並將剩餘參數及this指向帶入
+        }
+        return instance
+      }
+    }
+  </script>
+</body>
+</html>

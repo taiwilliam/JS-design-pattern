@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <!-- <script src="./main.js"></script> -->
-  <!-- <script src="./store.js"></script> -->
+  <title>單例模式-彈出視窗</title>
 </head>
 <style>
   .wrap {
@@ -67,6 +65,9 @@
         return instance
       }
     })()
+
+    // 缺點
+    // 1. 違反單一職責原則，createSingletonLoginModal既負責處理單例邏輯同時也負責產生彈出窗的邏輯，當下次這兩個邏輯要單獨使用時就會發現需要撰寫重複代碼
   </script>
 </body>
 </html>

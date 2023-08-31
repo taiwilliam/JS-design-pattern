@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>通用單例模式-事件綁定</title>
+</head>
+<style>
+  .wrap {
+    width: 400px;
+    margin: 16px auto;
+    text-align: center;
+  }
+  .list {
+    padding: 8px;
+    border: 1px solid gray;
+    margin-bottom: 8px;
+  }
+  .btn {
+    margin-bottom: 8px;
+  }
+</style>
+<body>
+  <div class="wrap">
+    <button class="btn">產生新列表</button>
+    <div class="list-wrap">
+      <div class="list">1</div>
+      <div class="list">2</div>
+      <div class="list">3</div>
+    </div>
+  </div>
+
+  <script>
+    let instance
+
+    const singletonBindEvent = getSingleton(bindEvent)
+
+    singletonBindEvent()
+
+    document.querySelector('.btn').onclick = () => {
+      renderList()
+    }
+
+    function renderList() {
+      createListDom()
+      singletonBindEvent()
+    }
+
+    function createListDom() {
+      const listCount = document.querySelectorAll('.list').length
+      const wrap = document.querySelector('.list-wrap')
+      let listHtml = document.createElement('div');
+      listHtml.classList.add('list')
+      listHtml.innerHTML = listCount + 1
+
+      wrap.appendChild(listHtml)
+      return listHtml
+    }
+
+    function bindEvent(el) {
+      document.querySelectorAll('.list').forEach(el => {
+        el.addEventListener('click', function() {
+          alert('點擊了')
+        })
+      })
+
+      return true
+    }
+
+
+    function getSingleton(fn) {
+      let instance
+      return function () {
+        return instance || (instance = fn.apply(this, arguments))
+      }
+    }
+  </script>
+</body>
+</html>
