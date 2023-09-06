@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>物件導向策略模式-計算獎金</title>
+  </head>
+  <style>
+    .wrap {
+      width: 400px;
+      margin: 16px auto;
+    }
+  </style>
+  <body>
+    <div class="wrap">
+      <button class="calcBtn">計算獎金</button>
+      <ul class="list-wrap">
+        <li data-level="A" data-salary="30000">泰森: <span>-</span></li>
+        <li data-level="C" data-salary="30000">雪例: <span>-</span></li>
+        <li data-level="D" data-salary="30000">泰瑞: <span>-</span></li>
+        <li data-level="S" data-salary="30000">茉莉: <span>-</span></li>
+        <li data-level="B" data-salary="30000">歐維士: <span>-</span></li>
+        <li data-level="S" data-salary="30000">葛瑞絲: <span>-</span></li>
+        <li data-level="B" data-salary="30000">又米: <span>-</span></li>
+        <li data-level="C" data-salary="30000">班奈特: <span>-</span></li>
+      </ul>
+    </div>
+    <script>
+      document.querySelector('.calcBtn').onclick = () => {
+        renderListBonus()
+      }
+
+      function renderListBonus() {
+        document.querySelectorAll('.list-wrap li').forEach(el => {
+          let level = el.getAttribute('data-level')
+          let salary = el.getAttribute('data-salary')
+          let target = el.querySelector('span')
+          
+          target.innerHTML = calcBonus(level, salary)
+        })
+      }
+
+      const MINIMUM_SALARY = 26400
+
+
+      function calcBonus(level, salary = MINIMUM_SALARY) {
+        let strategy = PERFORMANCE_STRATEGY_MAP[level] //獲取獎金計算策略
+        
+        return strategy(salary)
+      }
+
+      PERFORMANCE_STRATEGY_MAP = {
+        S: (salary) => {
+          return salary * 2.5
+        },
+        A: (salary) => {
+          return salary * 2
+        },
+        B: (salary) => {
+          return salary * 1.5
+        },
+        C: (salary) => {
+          return salary * 1
+        },
+        D: (salary) => {
+          return salary * .5
+        },
+      }
+    </script>
+  </body>
+</html>

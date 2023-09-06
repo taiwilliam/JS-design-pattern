@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JS策略模式-表單驗證</title>
+</head>
+<style>
+  .wrap{
+    width: 400px;
+    margin: 16px auto;
+    padding: 32px;
+  }
+  .form .input-wrap{
+    display: block;
+    margin-bottom: 16px;
+    width: 100%;
+  }
+  .form .input-wrap .input-text{
+    display: block;
+    font-size: .85rem;
+    color: red;
+    padding-top: 6px;
+  }
+</style>
+<body>
+  <div class="wrap">
+    <form class="form" action="" name="registerHostForm">
+      <div class="input-wrap">
+        <label>姓名</label>
+        <input type="text" name="name">
+      </div>
+      <div class="input-wrap">
+        <label>電話</label>
+        <input type="tel" name="phone">
+      </div>
+      <div class="input-wrap">
+        <label>密碼</label>
+        <input type="password" name="password">
+      </div>
+      <button>傳送</button>
+    </form>
+  </div>
+
+  <script type="module">
+    import validation from './vaildation/main.js'
+
+    // 獲取表單Dom
+    const formDom = document.querySelector('.form')
+
+    // 攔截表單傳送事件
+    formDom.onsubmit = () => {
+      const formValidation = registerValidation()
+      const errorMsg = formValidation.start()
+
+      // 若有任何錯誤訊息則渲染錯誤訊息並中斷傳送
+      if(errorMsg.length > 0){
+        renderFormErr(errorMsg)
+        return false
+      }
+    }
+
+    // 註冊驗證器函式
+    function registerValidation() {
+      const formValidation = new validation()
+
+      formValidation.register(formDom.name, [
+        {
+          rule: 'required',
+          errorMsg: '請輸入姓名'
+        }
+      ])
+
+      formValidation.register(formDom.phone, [
+        {
+          rule: 'required',
+          errorMsg: '請輸入手機'
+        },
+        {
+          rule: 'isPhone',
+          errorMsg: '手機號碼格式錯誤'
+        }
+      ])
+
+      formValidation.register(formDom.password, [
+        {
+          rule: 'required',
+          errorMsg: '請輸入密碼'
+        },
+        {
+          rule: 'min:6',
+          errorMsg: '密碼長度不得小於六位'
+        }
+      ])
+
+      return formValidation
+    }
+
+    // 渲染錯誤訊息
+    function renderFormErr(errorMsg) {
+      clearFormErr()
+
+      errorMsg.forEach(item => {
+        const inputName = Object.keys(item)[0]
+        const formDom = document.getElementsByName('registerHostForm')[0]
+        const inputWrap = formDom.querySelector(`[name='${inputName}']`)
+
+        let errHTML = document.createElement('span');
+        errHTML.classList.add('input-text')
+        errHTML.innerHTML = item[inputName]
+
+        inputWrap.parentElement.insertAdjacentElement('beforeend', errHTML)
+      });
+
+      function clearFormErr() {
+        document.querySelectorAll('span.input-text').forEach(e => e.remove())
+      }
+    }
+  </script>
+</body>
+</html>
