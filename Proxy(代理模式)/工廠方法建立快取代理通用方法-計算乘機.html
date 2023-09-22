@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工廠方法建立快取代理通用方法-計算乘機</title>
+</head>
+<body>
+  <script>
+
+    function mult() {
+      console.log('開始計算乘法')
+      return Array.prototype.reduce.call(arguments, (total, value) => total * value, 1)
+    }
+
+    function count() {
+      console.log('開始計算加法')
+      return Array.prototype.reduce.call(arguments, (total, value) => total + value, 0)
+    }
+
+    // 創建快取代理的工廠方法
+    function createCacheProxy(fn) {
+      let _cache = []
+      return function() {
+        let args = Array.prototype.join.call(arguments, ',')
+
+        if(args in _cache){
+          return _cache[args]
+        }
+
+        return _cache[args] = fn.call(this, ...arguments)
+      }
+    }
+
+    const multProxy = createCacheProxy(mult)
+    const countProxy = createCacheProxy(count)
+
+    console.log(multProxy(2,2,2))
+    console.log(multProxy(2,2,2))
+    console.log(multProxy(1,2,3))
+
+    console.log(countProxy(1,2,3))
+    console.log(countProxy(1,2,3))
+    console.log(countProxy(3,3,3))
+
+
+    // 透過快取代理的工廠方法 我們可以創建出有快取功能的加法、乘法函數
+    // 而代理方法在實務應用上還有一個好處，就是一開始並不用去思考要加入代理模式，而是之後因應需求擴充
+
+  </script>
+</body>
+</html>

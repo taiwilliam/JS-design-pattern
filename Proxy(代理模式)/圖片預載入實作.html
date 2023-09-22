@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>圖片預載入實作</title>
+</head>
+<style>
+  .wrap {
+    margin: 16px auto;
+    width: 800px;
+  }
+  .img{
+    width: 500px;
+    height: 300px;
+    object-fit: contain;
+    border: 1px solid #DDD;
+  }
+</style>
+<body>
+  <div class="wrap"></div>
+  <script>
+    // 課程範例原始程式碼
+
+    // var lazyImage = (function(){
+    //   var imgNode = document.createElement('img')
+    //   document.body.appendChild(imgNode)
+    //   var img = new Image
+
+    //   // 載入完後取代圖片
+    //   img.onload = function(){
+    //     imgNode.src = img.src
+    //   }
+
+    //   return {
+    //     setSrc: function (src) {
+    //       imgNode.src = 'https://1.bp.blogspot.com/-gi0_Z11wQ50/WJXv40ootbI/AAAAAAAAXIk/FElextKVXPEL2csuJP_ofvD9AUPfXAmyACLcB/s1600/loading.png'
+    //       img.src = src
+    //     }
+    //   }
+    // })()
+
+    // lazyImage.setSrc('https://images.pexels.com/photos/697313/pexels-photo-697313.jpeg')
+
+
+
+    class MyImage {
+      #img = ''
+      #node = ''
+      constructor () {
+        this.preSrc = 'https://retchhh.files.wordpress.com/2015/03/loading1.gif'
+        this.#createImgDom() // 創建img dom
+      }
+
+      // 創建img dom
+      #createImgDom() {
+        const imgNode = document.createElement('img')
+        imgNode.classList.add('img') 
+        document.querySelector('.wrap').appendChild(imgNode)
+
+        this.#node = imgNode
+      }
+
+      #createImgObj(src) {
+        const img = new Image()
+        img.src = src
+        return img
+      }
+
+      // 設定Img src連結
+      setSrc(src, preSrc) {
+        this.#img = this.#createImgObj(src) // 儲存需載入的圖片物件
+        this.#node.src = preSrc ? preSrc : this.preSrc
+
+        this.#img.onload = () => {
+          console.log('圖片載完啦~')
+          this.#node.src = this.#img.src // 替換圖片
+        }
+      }
+    }
+
+    const myImg = new MyImage()
+    myImg.setSrc('https://images.pexels.com/photos/697313/pexels-photo-697313.jpeg')
+
+    // 以上程式中我們實做了一個MyImage物件，他提供setSrc() 方法可以加入img的連結並且接受一個參數決定預載入的圖片
+    // 實現了替element元素設置圖片路徑以及延遲載入的功能
+
+    // 但這段程式很明顯的違反了單一職責原則
+    // 職責的定義為(引起變化的原因)
+    // MyImage能引起他變化的原因有設置圖片 及 延遲載入
+    // 這樣讓一個物件承擔過多職責會造成高耦合，進而導致高脆弱、低內聚的特性
+
+    // 在物件導向設計中通常只要違反任一職責，將同時將違反開放、封閉原則
+    // 倘若未來某一天網速太快了我們不需要預載入這個功能時，我們不得不改動MyImage物建
+    // 這也造成更多破壞MyImage 原本功能的風險
+  </script>
+</body>
+</html>

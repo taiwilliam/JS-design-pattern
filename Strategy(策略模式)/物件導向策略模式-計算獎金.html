@@ -48,6 +48,7 @@
       const MINIMUM_SALARY = 26400
 
 
+      // Context 物件
       class calcBonus {
         constructor () {
           this._salary = MINIMUM_SALARY
@@ -69,6 +70,8 @@
         }
       }
 
+
+      // Strategy 物件
       class performanceS {
         calculate(salary) {
           return salary * 2.5

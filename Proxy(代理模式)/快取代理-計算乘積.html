@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>快取代理-計算乘積</title>
+</head>
+<body>
+  <script>
+
+    // 乘積函數
+    function mult() {
+      console.log('計算開始')
+      return Array.from(arguments).reduce((total, value) => total * value, 1);
+    }
+
+    // 快取代理
+    const multCacheProxy = function() {
+      let _cache = []
+
+      return function () {
+        let args = Array.prototype.join.call(arguments,',') // ES5常見利用原生Array.prototype方法
+
+        if(args in _cache){
+          console.log('讀取快取')
+          return _cache[args];
+        }
+        
+        return _cache[args] = mult.apply(this, arguments)
+      }
+    }()
+
+    console.log(multCacheProxy(1,2,3))
+    console.log(multCacheProxy(1,2,3))
+    console.log(multCacheProxy(2,2,2))
+
+  </script>
+</body>
+</html>

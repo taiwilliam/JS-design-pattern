@@ -40,6 +40,7 @@ class validation {
     // 開始驗證
     // 遍歷所有註冊的單位
     this._cache.forEach(item => {
+      
       // 遍歷每個單位需要的驗證規則
       for(let i = 0; i < item.rules.length; i++){
         const rule = item.rules[i]

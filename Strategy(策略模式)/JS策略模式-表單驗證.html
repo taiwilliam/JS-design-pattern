@@ -48,7 +48,7 @@
     // 獲取表單Dom
     const formDom = document.querySelector('.form')
 
-    // 攔截表單傳送事件
+    // 攔截表單傳送事
     formDom.onsubmit = () => {
       const formValidation = registerValidation()
       const errorMsg = formValidation.start()
@@ -57,6 +57,8 @@
       if(errorMsg.length > 0){
         renderFormErr(errorMsg)
         return false
+      }else{
+        alert('傳送成功')
       }
     }
 
