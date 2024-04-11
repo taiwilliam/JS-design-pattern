@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TemplateMethod(模板方法模式)</title>
+  </head>
+  <style>
+    .box {
+      width: 400px;
+      margin: 0 auto;
+    }
+  </style>
+  <body>
+    <div class="box">
+      <h2>TemplateMethod(模板方法模式)</h2>
+      <p>本質上，它提供了流程的基本結構，同時允許更改或修改每個步驟的實作。</p>
+      <p>
+        模板方法模式由兩部分結構組成，第一部分是「抽象父類別」，第二部分是具體的「實作子類別」。
+      </p>
+      <p>
+        通常在抽象父類別中封裝了子類別的演算法框架，包括實作一些公共方法以及封裝子類別中所有方法的執行順序。
+      </p>
+      <p>
+        子類別透過繼承這個抽象類，也繼承了整個演算法結構，並且可以選擇重寫父類別的方法。
+      </p>
+    </div>
+  </body>
+</html>
